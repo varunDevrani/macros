@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from src.models.skill_activity import SkillActivity
 from src.repositories.interfaces.skill_activity import ISkillActivityRepository
-from src.schemas.skill import SkillActivityCreateRequest
+from src.schemas.skill import SkillActivityCreateRequest, SkillActivityPartialUpdateRequest, SkillActivityUpdateRequest
 
 
 class SkillActivityRepository(ISkillActivityRepository):
@@ -61,5 +61,39 @@ class SkillActivityRepository(ISkillActivityRepository):
 		
 		self.db.delete(skill_activity_data)
 		self.db.commit()
-		return skill_activity_data 
+		return skill_activity_data
+	
+	def update_by_id(
+		self,
+		id: UUID,
+		payload: SkillActivityUpdateRequest
+	) -> Union[SkillActivity, None]:
+		skill_activity_data = self.find_by_id(id)
+		if skill_activity_data is None:
+			return None
 		
+		updated_payload = payload.model_dump()
+		for key, value in updated_payload.items():
+			setattr(skill_activity_data, key, value)
+		
+		self.db.commit()
+		self.db.refresh(skill_activity_data)
+		return skill_activity_data
+	
+	def partial_update_by_id(
+		self,
+		id: UUID,
+		payload: SkillActivityPartialUpdateRequest
+	) -> Union[SkillActivity, None]:		
+		skill_activity_data = self.find_by_id(id)
+		if skill_activity_data is None:
+			return None
+		
+		updated_payload = payload.model_dump(exclude_none=True, exclude_unset=True)
+		for key, value in updated_payload.items():
+			setattr(skill_activity_data, key, value)
+		
+		self.db.commit()
+		self.db.refresh(skill_activity_data)
+		return skill_activity_data
+

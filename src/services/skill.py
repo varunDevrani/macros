@@ -9,7 +9,7 @@ from src.exceptions import DomainException, FieldViolation
 from src.repositories.interfaces.skill import ISkillRepository
 from src.repositories.interfaces.skill_activity import ISkillActivityRepository
 from src.repositories.interfaces.user import IUserRepository
-from src.schemas.skill import SkillActivityCreateRequest, SkillActivityResponse, SkillCreateRequest, SkillResponse
+from src.schemas.skill import SkillActivityCreateRequest, SkillActivityPartialUpdateRequest, SkillActivityResponse, SkillActivityUpdateRequest, SkillCreateRequest, SkillPartialUpdateRequest, SkillResponse, SkillUpdateRequest
 
 
 def create_skill(
@@ -174,4 +174,131 @@ def delete_skill_activity_by_id(
 	skill_activity_data = skill_activity_repo.delete_by_id(activity_id)
 	
 	return SkillActivityResponse.model_validate(skill_activity_data)
+
+
+def update_skill_activity_by_id(
+	skill_id: UUID,
+	activity_id: UUID,
+	payload: SkillActivityUpdateRequest,
+	user_id: UUID,
+	skill_repo: ISkillRepository,
+	skill_activity_repo: ISkillActivityRepository
+):
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+		
+	
+	skill_activity_data = skill_activity_repo.find_by_id(activity_id)
+	if skill_activity_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill activity does not exist"
+		)
+	
+	skill_activity_data = skill_activity_repo.update_by_id(activity_id, payload)
+	
+	return SkillActivityResponse.model_validate(skill_activity_data)
+
+
+def partial_update_skill_activity_by_id(
+	skill_id: UUID,
+	activity_id: UUID,
+	payload: SkillActivityPartialUpdateRequest,
+	user_id: UUID,
+	skill_repo: ISkillRepository,
+	skill_activity_repo: ISkillActivityRepository
+):
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+		
+	
+	skill_activity_data = skill_activity_repo.find_by_id(activity_id)
+	if skill_activity_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill activity does not exist"
+		)
+	
+	skill_activity_data = skill_activity_repo.partial_update_by_id(activity_id, payload)
+	
+	return SkillActivityResponse.model_validate(skill_activity_data)
+
+
+def update_skill_by_id(
+	skill_id: UUID,
+	payload: SkillUpdateRequest,
+	user_id: UUID,
+	user_repo: IUserRepository,
+	skill_repo: ISkillRepository
+):
+	user_data = user_repo.find_by_id(user_id)
+	if user_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="user does not exist"
+		)
+	
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	skill_data = skill_repo.update_by_id(skill_id, payload)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	return SkillResponse(
+		id=skill_data.id,
+		name=skill_data.name,
+		is_completed=skill_data.is_completed
+	)
+
+
+def partial_update_skill_by_id(
+	skill_id: UUID,
+	payload: SkillPartialUpdateRequest,
+	user_id: UUID,
+	user_repo: IUserRepository,
+	skill_repo: ISkillRepository
+):
+	user_data = user_repo.find_by_id(user_id)
+	if user_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="user does not exist"
+		)
+	
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	skill_data = skill_repo.partial_update_by_id(skill_id, payload)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	return SkillResponse(
+		id=skill_data.id,
+		name=skill_data.name,
+		is_completed=skill_data.is_completed
+	)
+
 

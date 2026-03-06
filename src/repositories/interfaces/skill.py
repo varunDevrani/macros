@@ -7,7 +7,7 @@ from typing import Union
 from uuid import UUID
 
 from src.models.skill import Skill
-from src.schemas.skill import SkillCreateRequest
+from src.schemas.skill import SkillCreateRequest, SkillPartialUpdateRequest, SkillUpdateRequest
 
 
 class ISkillRepository(ABC):
@@ -33,4 +33,22 @@ class ISkillRepository(ABC):
 		name: str
 	) -> Union[Skill, None]:
 		raise NotImplementedError
+	
+	@abstractmethod
+	def update_by_id(
+		self,
+		id: UUID,
+		payload: SkillUpdateRequest,
+	) -> Union[Skill, None]:
+		raise NotImplementedError
+	
+	@abstractmethod
+	def partial_update_by_id(
+		self,
+		id: UUID,
+		payload: SkillPartialUpdateRequest
+	) -> Union[Skill, None]:
+		raise NotImplementedError
+
+
 	

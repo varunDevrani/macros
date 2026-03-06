@@ -30,21 +30,44 @@ class SkillActivityUpdateRequest(BaseModel):
 	is_completed: bool
 	minutes_practised: int
 
+class SkillActivityPartialUpdateRequest(BaseModel):
+	name: Union[str, None] = None
+	is_priority: Union[bool, None] = None
+	is_habit_to_protect: Union[bool, None] = None
+	is_completed: Union[bool, None] = None
+	minutes_practised: Union[int, None] = None
+
+class SkillActivityBatchCreateRequest(BaseModel):
+	activities: List[SkillActivityCreateRequest] = []
+
+class SkillActivityBatchUpdateRequest(BaseModel):
+	activities: List[SkillActivityUpdateRequest] = []
+
+class SkillActivityBatchPartialUpdateRequest(BaseModel):
+	activites: List[SkillActivityPartialUpdateRequest] = []
+
+class SkillActivityBatchResponse(BaseModel):
+	activities: List[SkillActivityResponse] = []
+
 class SkillResponse(BaseModel):
     id: UUID
     name: str
     is_completed: bool
-    total_activites: int
+    total_activites: Union[int, None] = None
     activities: Union[List[SkillActivityResponse], None] = None
 
 class SkillCreateRequest(BaseModel):
     name: str
     activities: Union[List[SkillActivityCreateRequest], None] = None
+
+class SkillPartialUpdateRequest(BaseModel):
+    name: str
+    is_completed: bool
     
 class SkillUpdateRequest(BaseModel):
     name: Union[str, None] = None
     is_completed: Union[bool, None] = None
-    activities: Union[List[SkillActivityUpdateRequest], None] = None
+
 
 class SkillsResponse(BaseModel):
 	total_skills: int

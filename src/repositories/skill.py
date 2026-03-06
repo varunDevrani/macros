@@ -10,7 +10,7 @@ from sqlalchemy.orm.session import Session
 
 from src.models.skill import Skill
 from src.repositories.interfaces.skill import ISkillRepository
-from src.schemas.skill import SkillCreateRequest
+from src.schemas.skill import SkillCreateRequest, SkillPartialUpdateRequest, SkillUpdateRequest
 
 
 class SkillRepository(ISkillRepository):
@@ -53,5 +53,37 @@ class SkillRepository(ISkillRepository):
 		skill_data = self.db.scalar(stmt)
 		return skill_data
 
-
+	def update_by_id(
+		self,
+		id: UUID,
+		payload: SkillUpdateRequest,
+	) -> Union[Skill, None]:
+		skill_data = self.find_by_id(id)
+		if skill_data is None:
+			return None
+		
+		updated_payload = payload.model_dump()
+		for key, value in updated_payload.items():
+			setattr(skill_data, key, value)
+		
+		self.db.commit()
+		self.db.refresh(skill_data)
+		return skill_data
 	
+	def partial_update_by_id(
+		self,
+		id: UUID,
+		payload: SkillPartialUpdateRequest
+	) -> Union[Skill, None]:
+		skill_data = self.find_by_id(id)
+		if skill_data is None:
+			return None
+		
+		updated_payload = payload.model_dump(exclude_none=True, exclude_unset=True)
+		for key, value in updated_payload.items():
+			setattr(skill_data, key, value)
+		
+		self.db.commit()
+		self.db.refresh(skill_data)
+		return skill_data
+

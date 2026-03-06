@@ -7,7 +7,7 @@ from typing import Union, Sequence
 from uuid import UUID
 
 from src.models.skill_activity import SkillActivity
-from src.schemas.skill import SkillActivityCreateRequest
+from src.schemas.skill import SkillActivityCreateRequest, SkillActivityPartialUpdateRequest, SkillActivityUpdateRequest
 
 
 class ISkillActivityRepository(ABC):
@@ -38,6 +38,22 @@ class ISkillActivityRepository(ABC):
 	def delete_by_id(
 		self,
 		id: UUID
+	) -> Union[SkillActivity, None]:
+		raise NotImplementedError
+		
+	@abstractmethod
+	def update_by_id(
+		self,
+		id: UUID,
+		payload: SkillActivityUpdateRequest
+	) -> Union[SkillActivity, None]:
+		raise NotImplementedError
+	
+	@abstractmethod
+	def partial_update_by_id(
+		self,
+		id: UUID,
+		payload: SkillActivityPartialUpdateRequest
 	) -> Union[SkillActivity, None]:
 		raise NotImplementedError
 
