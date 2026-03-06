@@ -57,7 +57,7 @@ def create_skill_activity(
 	)
 	
 	return SuccessResponse[SkillActivityResponse](
-		message="skill activity fectched successfully",
+		message="skill activity created successfully",
 		data=skill_activity_data
 	)
 
@@ -69,7 +69,20 @@ def get_skill_by_id(
 	user_id: UUID,
 	db: Session
 ):
-	pass
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+	
+	skill_data = services.get_skill_by_id(
+		skill_id,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+	
+	return SuccessResponse[SkillResponse](
+		message="skill fetched successfully",
+		data=skill_data
+	)
 
 
 def get_skill_activity_by_id(
@@ -80,5 +93,20 @@ def get_skill_activity_by_id(
 	user_id: UUID,
 	db: Session
 ):
-	pass
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+	
+	skill_activity_data = services.get_skill_activity_by_id(
+		skill_id,
+		activity_id,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+	
+	return SuccessResponse[SkillActivityResponse](
+		message="skill fetched successfully",
+		data=skill_activity_data
+	)
+
 

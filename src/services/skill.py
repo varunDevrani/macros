@@ -97,3 +97,54 @@ def create_skill_activity(
 	return SkillActivityResponse.model_validate(skill_activity_data)
 
 
+def get_skill_by_id(
+	skill_id: UUID,
+	user_id: UUID,
+	skill_repo: ISkillRepository,
+	skill_activity_repo: ISkillActivityRepository
+):
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	activities: List[SkillActivityResponse] = []
+	skill_activity_data = skill_activity_repo.find_all_by_skill_id(skill_data.id)
+	for activity in skill_activity_data:
+		activities.append(SkillActivityResponse.model_validate(activity))
+	
+	return SkillResponse(
+		id=skill_data.id,
+		name=skill_data.name,
+		is_completed=skill_data.is_completed,
+		total_activites=len(activities),
+		activities=activities
+	)
+
+
+def get_skill_activity_by_id(
+	skill_id: UUID,
+	activity_id: UUID,
+	user_id: UUID,
+	skill_repo: ISkillRepository,
+	skill_activity_repo: ISkillActivityRepository
+):
+	
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+	
+	skill_activity_data = skill_activity_repo.find_by_id(activity_id)
+	if skill_activity_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill activity does not exist"
+		)
+	
+	return SkillActivityResponse.model_validate(skill_activity_data)
+
