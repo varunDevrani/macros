@@ -80,6 +80,65 @@ def get_skill_by_id(
 	)
 
 
+
+@router.post("/{skill_id}/activities/batch", status_code=HTTPStatus.CREATED, response_model=SuccessResponse[SkillActivityBatchResponse])
+def create_batch_skill_activity(
+	request: Request,
+	response: Response,
+	skill_id: UUID,
+	payload: SkillActivityBatchCreateRequest,
+	user_id: UUID = Depends(get_current_user),
+	db: Session = Depends(get_db)
+):
+	return controllers.create_batch_skill_activity(
+		request,
+		response,
+		skill_id,
+		payload,
+		user_id,
+		db
+	)
+
+
+@router.put("/{skill_id}/activities/batch", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityBatchResponse])
+def update_batch_skill_activity(
+	request: Request,
+	response: Response,
+	skill_id: UUID,
+	payload: SkillActivityBatchUpdateRequest,
+	user_id: UUID = Depends(get_current_user),
+	db: Session = Depends(get_db)
+):
+	return controllers.update_batch_skill_activity(
+		request,
+		response,
+		skill_id,
+		payload,
+		user_id,
+		db
+	)
+
+
+@router.patch("/{skill_id}/activities/batch", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityBatchResponse])
+def partial_update_batch_skill_activity(
+	request: Request,
+	response: Response,
+	skill_id: UUID,
+	payload: SkillActivityBatchPartialUpdateRequest,
+	user_id: UUID = Depends(get_current_user),
+	db: Session = Depends(get_db)
+):
+	return controllers.partial_update_batch_skill_activity(
+		request,
+		response,
+		skill_id,
+		payload,
+		user_id,
+		db
+	)
+
+
+
 @router.get("/{skill_id}/activities/{activity_id}", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityResponse])
 def get_skill_activity_by_id(
 	request: Request,
@@ -196,59 +255,3 @@ def partial_update_skill_by_id(
 		db
 	)
 
-
-@router.post("/{skill_id}/activities/batch", status_code=HTTPStatus.CREATED, response_model=SuccessResponse[SkillActivityBatchResponse])
-def create_batch_skill_activity(
-	request: Request,
-	response: Response,
-	skill_id: UUID,
-	payload: SkillActivityBatchCreateRequest,
-	user_id: UUID = Depends(get_current_user),
-	db: Session = Depends(get_db)
-):
-	return controllers.create_batch_skill_activity(
-		request,
-		response,
-		skill_id,
-		payload,
-		user_id,
-		db
-	)
-
-
-@router.put("/{skill_id}/activities/batch", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityBatchResponse])
-def update_batch_skill_activity(
-	request: Request,
-	response: Response,
-	skill_id: UUID,
-	payload: SkillActivityBatchUpdateRequest,
-	user_id: UUID = Depends(get_current_user),
-	db: Session = Depends(get_db)
-):
-	return controllers.update_batch_skill_activity(
-		request,
-		response,
-		skill_id,
-		payload,
-		user_id,
-		db
-	)
-
-
-@router.patch("/{skill_id}/activities/batch", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityBatchPartialUpdateRequest])
-def partial_update_batch_skill_activity(
-	request: Request,
-	response: Response,
-	skill_id: UUID,
-	payload: SkillActivityBatchPartialUpdateRequest,
-	user_id: UUID = Depends(get_current_user),
-	db: Session = Depends(get_db)
-):
-	return controllers.partial_update_batch_skill_activity(
-		request,
-		response,
-		skill_id,
-		payload,
-		user_id,
-		db
-	)

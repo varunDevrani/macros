@@ -11,6 +11,7 @@ from src.schemas.api_response import SuccessResponse
 from src.schemas.skill import (
     SkillActivityBatchCreateRequest,
     SkillActivityBatchPartialUpdateRequest,
+    SkillActivityBatchResponse,
     SkillActivityBatchUpdateRequest,
     SkillActivityCreateRequest,
     SkillActivityPartialUpdateRequest,
@@ -258,7 +259,21 @@ def create_batch_skill_activity(
 	user_id: UUID,
 	db: Session
 ):
-	pass
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+
+	skill_activity_data = services.create_batch_skill_activity(
+		skill_id,
+		payload,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+
+	return SuccessResponse[SkillActivityBatchResponse](
+		message="skill activites created successfully",
+		data=skill_activity_data
+	)
 
 
 def update_batch_skill_activity(
@@ -269,7 +284,21 @@ def update_batch_skill_activity(
 	user_id: UUID,
 	db: Session
 ):
-	pass
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+
+	skill_activity_data = services.update_batch_skill_activity(
+		skill_id,
+		payload,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+
+	return SuccessResponse[SkillActivityBatchResponse](
+		message="skill activites updated successfully",
+		data=skill_activity_data
+	)
 
 
 def partial_update_batch_skill_activity(
@@ -280,4 +309,18 @@ def partial_update_batch_skill_activity(
 	user_id: UUID,
 	db: Session
 ):
-	pass
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+
+	skill_activity_data = services.partial_update_batch_skill_activity(
+		skill_id,
+		payload,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+
+	return SuccessResponse[SkillActivityBatchResponse](
+		message="skill activites patched successfully",
+		data=skill_activity_data
+	)

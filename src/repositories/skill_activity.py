@@ -72,7 +72,7 @@ class SkillActivityRepository(ISkillActivityRepository):
 		if skill_activity_data is None:
 			return None
 		
-		updated_payload = payload.model_dump()
+		updated_payload = payload.model_dump(exclude={"id"})
 		for key, value in updated_payload.items():
 			setattr(skill_activity_data, key, value)
 		
@@ -89,7 +89,7 @@ class SkillActivityRepository(ISkillActivityRepository):
 		if skill_activity_data is None:
 			return None
 		
-		updated_payload = payload.model_dump(exclude_none=True, exclude_unset=True)
+		updated_payload = payload.model_dump(exclude={"id"}, exclude_none=True, exclude_unset=True)
 		for key, value in updated_payload.items():
 			setattr(skill_activity_data, key, value)
 		

@@ -24,6 +24,7 @@ class SkillActivityCreateRequest(BaseModel):
 
 
 class SkillActivityUpdateRequest(BaseModel):
+	id: Union[str, None] = None
 	name: str
 	is_priority: bool
 	is_habit_to_protect: bool
@@ -31,6 +32,7 @@ class SkillActivityUpdateRequest(BaseModel):
 	minutes_practised: int
 
 class SkillActivityPartialUpdateRequest(BaseModel):
+	id: Union[str, None] = None
 	name: Union[str, None] = None
 	is_priority: Union[bool, None] = None
 	is_habit_to_protect: Union[bool, None] = None
@@ -44,7 +46,7 @@ class SkillActivityBatchUpdateRequest(BaseModel):
 	activities: List[SkillActivityUpdateRequest] = []
 
 class SkillActivityBatchPartialUpdateRequest(BaseModel):
-	activites: List[SkillActivityPartialUpdateRequest] = []
+	activities: List[SkillActivityPartialUpdateRequest] = []
 
 class SkillActivityBatchResponse(BaseModel):
 	activities: List[SkillActivityResponse] = []
