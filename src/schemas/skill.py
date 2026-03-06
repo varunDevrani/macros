@@ -1,9 +1,11 @@
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import date
 from typing import Union, List
 
 class SkillActivityResponse(BaseModel):
+	model_config = ConfigDict(from_attributes=True)
+	
 	id: UUID
 	entry_date: date
 	name: str

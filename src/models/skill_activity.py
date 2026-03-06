@@ -23,7 +23,7 @@ class SkillActivity(Base):
 	)
 	
 	entry_date: Mapped[date] = mapped_column(
-		default= lambda: date.today
+		default= lambda: date.today()
 	)
 	
 	name: Mapped[str] = mapped_column()

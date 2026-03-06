@@ -22,9 +22,13 @@ class Skill(Base):
 		ForeignKey("users.id")
 	)
 	
-	name: Mapped[str] = mapped_column()
+	name: Mapped[str] = mapped_column(
+		unique=True
+	)
 	
-	is_completed: Mapped[bool] = mapped_column()
+	is_completed: Mapped[bool] = mapped_column(
+		default=False
+	)
 	
 	created_at: Mapped[datetime] = mapped_column(
 		DateTime(timezone=True),

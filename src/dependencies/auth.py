@@ -12,7 +12,7 @@ security = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
+    credentials: HTTPAuthorizationCredentials | None = Depends(security)
 ) -> UUID:
     
 	if not credentials:
