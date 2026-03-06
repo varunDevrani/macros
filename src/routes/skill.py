@@ -85,3 +85,26 @@ def get_skill_activity_by_id(
 		user_id,
 		db
 	)
+
+
+@router.delete("/{skill_id}/activities/{activity_id}", status_code=HTTPStatus.OK, response_model=SuccessResponse[SkillActivityResponse])
+def delete_skill_activity_by_id(
+	request: Request,
+	response: Response,
+	skill_id: UUID,
+	activity_id: UUID,
+	user_id: UUID = Depends(get_current_user),
+	db: Session = Depends(get_db)
+):
+	return controllers.delete_skill_activity_by_id(
+		request,
+		response,
+		skill_id,
+		activity_id,
+		user_id,
+		db
+	)
+
+
+
+

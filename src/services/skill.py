@@ -148,3 +148,30 @@ def get_skill_activity_by_id(
 	
 	return SkillActivityResponse.model_validate(skill_activity_data)
 
+
+def delete_skill_activity_by_id(
+	skill_id: UUID,
+	activity_id: UUID,
+	user_id: UUID,
+	skill_repo: ISkillRepository,
+	skill_activity_repo: ISkillActivityRepository
+):
+	skill_data = skill_repo.find_by_id(skill_id)
+	if skill_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill does not exist"
+		)
+		
+	
+	skill_activity_data = skill_activity_repo.find_by_id(activity_id)
+	if skill_activity_data is None:
+		raise DomainException(
+			status_code=HTTPStatus.NOT_FOUND,
+			message="skill activity does not exist"
+		)
+	
+	skill_activity_data = skill_activity_repo.delete_by_id(activity_id)
+	
+	return SkillActivityResponse.model_validate(skill_activity_data)
+

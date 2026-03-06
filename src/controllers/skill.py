@@ -110,3 +110,27 @@ def get_skill_activity_by_id(
 	)
 
 
+def delete_skill_activity_by_id(
+	request: Request,
+	response: Response,
+	skill_id: UUID,
+	activity_id: UUID,
+	user_id: UUID,
+	db: Session
+):
+	skill_repo = SkillRepository(db)
+	skill_activity_repo = SkillActivityRepository(db)
+
+	skill_activity_data = services.delete_skill_activity_by_id(
+		skill_id, 
+		activity_id,
+		user_id,
+		skill_repo,
+		skill_activity_repo
+	)
+	
+	return SuccessResponse[SkillActivityResponse](
+		message="skill deleted successfully",
+		data=skill_activity_data
+	) 
+	
